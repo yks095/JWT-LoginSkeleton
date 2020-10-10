@@ -8,6 +8,7 @@ class JwtSkeletonApplicationTests {
 
     @Test
     void contextLoads() {
+        JwtSkeletonApplication.main(new String[]{});
     }
 
 }

@@ -1,0 +1,15 @@
+language: java
+jdk:
+  - openjdk8
+
+branches:
+  only:
+    - master
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+after_success:
+  - ./gradlew test jacocoTestReport coveralls
