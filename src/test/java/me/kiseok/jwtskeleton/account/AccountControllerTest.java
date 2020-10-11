@@ -1,7 +1,6 @@
 package me.kiseok.jwtskeleton.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.kiseok.jwtskeleton.common.TestProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,9 +35,6 @@ class AccountControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    TestProperties testProperties;
-
-    @Autowired
     AccountRepository accountRepository;
 
     @BeforeEach
@@ -53,8 +49,6 @@ class AccountControllerTest {
         AccountDto accountDto = AccountDto.builder()
                 .email(email)
                 .password(password)
-                .name(testProperties.getName())
-                .picture(testProperties.getPicture())
                 .build();
 
         mockMvc.perform(post("/api/accounts")
@@ -68,9 +62,12 @@ class AccountControllerTest {
     @DisplayName("유저 저장 성공 -> 201 CREATED")
     @Test
     void save_account_201() throws Exception    {
+        String email = "test@email.com";
+        String password = "testPassword";
+
         AccountDto accountDto = AccountDto.builder()
-                .email(testProperties.getEmail())
-                .password(testProperties.getPassword())
+                .email(email)
+                .password(password)
                 .build();
 
         ResultActions actions = mockMvc.perform(post("/api/accounts")
@@ -79,19 +76,19 @@ class AccountControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("email").value(testProperties.getEmail()))
-                .andExpect(jsonPath("password").value(testProperties.getPassword()))
+                .andExpect(jsonPath("email").value(email))
+                .andExpect(jsonPath("password").value(password))
                 ;
 
         String contentAsString = actions.andReturn().getResponse().getContentAsString();
         AccountDto response = objectMapper.readValue(contentAsString, AccountDto.class);
         Account saved = accountRepository.findByEmail(response.getEmail()).get();
 
-        assertEquals(response.getEmail(), testProperties.getEmail());
-        assertEquals(response.getPassword(), testProperties.getPassword());
+        assertEquals(response.getEmail(), email);
+        assertEquals(response.getPassword(), password);
 
-        assertEquals(saved.getEmail(), testProperties.getEmail());
-        assertEquals(saved.getPassword(), testProperties.getPassword());
+        assertEquals(saved.getEmail(), email);
+        assertEquals(saved.getPassword(), password);
     }
 
     @DisplayName("DB에 없는 유저 불러오기 -> 404 NOT_FOUND")
@@ -107,9 +104,12 @@ class AccountControllerTest {
     @DisplayName("정상적으로 유저 불러오기 -> 200 OK")
     @Test
     void load_account_200() throws Exception    {
+        String email = "test@email.com";
+        String password = "testPassword";
+
         AccountDto accountDto = AccountDto.builder()
-                .email(testProperties.getEmail())
-                .password(testProperties.getPassword())
+                .email(email)
+                .password(password)
                 .build();
 
         ResultActions actions = mockMvc.perform(post("/api/accounts")
@@ -118,8 +118,8 @@ class AccountControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("email").value(testProperties.getEmail()))
-                .andExpect(jsonPath("password").value(testProperties.getPassword()))
+                .andExpect(jsonPath("email").value(email))
+                .andExpect(jsonPath("password").value(password))
                 ;
 
         String contentAsString = actions.andReturn().getResponse().getContentAsString();
