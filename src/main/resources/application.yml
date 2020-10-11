@@ -9,3 +9,9 @@ spring:
     hibernate:
       ddl-auto: create
     open-in-view: false
+
+test:
+  email: test@email.com
+  password: testPassword
+  name: testName
+  picture: testPicture
