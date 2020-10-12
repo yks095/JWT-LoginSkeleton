@@ -30,7 +30,7 @@ public class AccountController {
     @PostMapping
     ResponseEntity<?> saveAccount(@RequestBody @Valid AccountRequestDto accountDto, Errors errors)    {
         if(errors.hasErrors())  {
-            return new ResponseEntity<>(errors.getFieldErrorCount(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errors.getFieldError(), HttpStatus.BAD_REQUEST);
         }
         Account savedAccount = accountRepository.save(accountDto.toEntity(passwordEncoder));
         AccountResponseDto responseDto = new AccountResponseDto();

@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -201,6 +202,9 @@ class AccountControllerTest {
 
     private static Stream<Arguments> validSaveAccount() {
         return Stream.of(
+                Arguments.of(null, null),
+                Arguments.of("null", null),
+                Arguments.of(null, "null"),
                 Arguments.of("", ""),
                 Arguments.of(" ", ""),
                 Arguments.of("", " "),
