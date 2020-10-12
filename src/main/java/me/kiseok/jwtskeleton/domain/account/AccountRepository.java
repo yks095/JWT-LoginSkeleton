@@ -1,4 +1,4 @@
-package me.kiseok.jwtskeleton.account;
+package me.kiseok.jwtskeleton.domain.account;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;

@@ -1,16 +1,19 @@
-package me.kiseok.jwtskeleton.account;
+package me.kiseok.jwtskeleton.domain.account;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AccountRepositoryTest {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     AccountRepository accountRepository;
@@ -28,21 +31,21 @@ class AccountRepositoryTest {
         String name = "testName";
         String picture = "testPicture";
 
-        Account account = Account.builder()
+        Account requestDto = Account.builder()
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .name(name)
                 .picture(picture)
                 .build();
 
-        Account save = accountRepository.save(account);
+        Account save = accountRepository.save(requestDto);
 
         Optional<Account> optionalAccount = accountRepository.findById(save.getId());
         Account savedAccount = optionalAccount.get();
 
         assertNotNull(optionalAccount);
         assertEquals(savedAccount.getEmail(), email);
-        assertEquals(savedAccount.getPassword(), password);
+        assertTrue(passwordEncoder.matches(password, savedAccount.getPassword()));
         assertEquals(savedAccount.getName(), name);
         assertEquals(savedAccount.getPicture(), picture);
     }
@@ -55,21 +58,21 @@ class AccountRepositoryTest {
         String name = "testName";
         String picture = "testPicture";
 
-        Account account = Account.builder()
+        Account requestDto = Account.builder()
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .name(name)
                 .picture(picture)
                 .build();
 
-        Account save = accountRepository.save(account);
+        Account save = accountRepository.save(requestDto);
 
         Optional<Account> optionalAccount = accountRepository.findByEmail(save.getEmail());
         Account savedAccount = optionalAccount.get();
 
         assertNotNull(optionalAccount);
         assertEquals(savedAccount.getEmail(), email);
-        assertEquals(savedAccount.getPassword(), password);
+        assertTrue(passwordEncoder.matches(password, savedAccount.getPassword()));
         assertEquals(savedAccount.getName(), name);
         assertEquals(savedAccount.getPicture(), picture);
     }
