@@ -132,6 +132,37 @@ class AccountControllerTest {
         ;
     }
 
+    @DisplayName("비로그인 유저가 유저 정보를 불러오기 -> 401 UNAUTHORIZED")
+    @Test
+    void load_account_unauthorized_401() throws Exception   {
+        String email = "test@email.com";
+        String password = "testPassword";
+
+        AccountRequestDto requestDto = AccountRequestDto.builder()
+                .email(email)
+                .password(password)
+                .build();
+
+        ResultActions actions = mockMvc.perform(post("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("email").value(email))
+                ;
+
+        String contentAsString = actions.andReturn().getResponse().getContentAsString();
+        AccountResponseDto responseDto = objectMapper.readValue(contentAsString, AccountResponseDto.class);
+
+        mockMvc.perform(get("/api/accounts/" + responseDto.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+        ;
+
+    }
+
     @DisplayName("정상적으로 유저 불러오기 -> 200 OK")
     @Test
     void load_account_200() throws Exception    {
