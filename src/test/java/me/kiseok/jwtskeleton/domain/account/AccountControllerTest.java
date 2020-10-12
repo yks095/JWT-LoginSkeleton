@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.kiseok.jwtskeleton.config.jwt.JwtProvider;
 import me.kiseok.jwtskeleton.domain.account.dto.AccountRequestDto;
 import me.kiseok.jwtskeleton.domain.account.dto.AccountResponseDto;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginRequestDto;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import java.util.List;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -113,16 +112,17 @@ class AccountControllerTest {
                 .password(password)
                 .build();
 
-        mockMvc.perform(post("/api/accounts")
+        ResultActions actions = mockMvc.perform(post("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("email").value(email))
-                ;
+                .andExpect(jsonPath("email").value(email));
 
-        String jwt = loginAccount(email, password);
+        String contentAsString = actions.andReturn().getResponse().getContentAsString();
+        AccountResponseDto responseDto = objectMapper.readValue(contentAsString, AccountResponseDto.class);
+        String jwt = loginAccount(email, responseDto.getRoles());
 
         mockMvc.perform(get("/api/accounts/-1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +154,7 @@ class AccountControllerTest {
 
         String contentAsString = actions.andReturn().getResponse().getContentAsString();
         AccountResponseDto responseDto = objectMapper.readValue(contentAsString, AccountResponseDto.class);
-        String jwt = loginAccount(email, password);
+        String jwt = loginAccount(email, responseDto.getRoles());
 
         mockMvc.perform(get("/api/accounts/" + responseDto.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -164,23 +164,8 @@ class AccountControllerTest {
         ;
     }
 
-    private String loginAccount(String email, String password) throws Exception {
-        LoginRequestDto requestDto = LoginRequestDto.builder()
-                .email(email)
-                .password(password)
-                .build();
-
-        ResultActions actions = mockMvc.perform(post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                ;
-
-        String contentAsString = actions.andReturn().getResponse().getContentAsString();
-        LoginResponseDto responseDto = objectMapper.readValue(contentAsString, LoginResponseDto.class);
-
-        return "Bearer " + responseDto.getJwt();
+    private String loginAccount(String email, List<String> roles) {
+        return "Bearer " + jwtProvider.generateJwt(email, roles);
     }
 
     private static Stream<Arguments> validSaveAccount() {
