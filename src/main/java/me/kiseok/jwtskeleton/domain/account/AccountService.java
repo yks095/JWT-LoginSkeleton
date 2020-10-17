@@ -27,7 +27,6 @@ public class AccountService implements UserDetailsService, OAuth2UserService<OAu
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("Google Login 진입");
         OAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
