@@ -4,8 +4,11 @@ import me.kiseok.jwtskeleton.domain.account.dto.AccountRequestDto;
 import me.kiseok.jwtskeleton.domain.account.dto.AccountResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ActiveProfiles("test")
 class AccountDtoTest {
 
     @DisplayName("AccountRequestDto @Getter, @Builder 테스트")

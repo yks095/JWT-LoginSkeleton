@@ -10,3 +10,15 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 1
+            client-secret: 1
+            scope: profile, email
+
+server:
+  error:
+    include-message: always

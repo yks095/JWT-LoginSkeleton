@@ -4,8 +4,11 @@ import me.kiseok.jwtskeleton.domain.login.dto.LoginRequestDto;
 import me.kiseok.jwtskeleton.domain.login.dto.LoginResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ActiveProfiles("test")
 class LoginDtoTest {
 
     @DisplayName("LoginRequestDto @Getter @Builder 테스트")
