@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>SingIn</title>
+</head>
+<body>
+
+<form th:action="@{/sign-in}" method="post" class="form_border">
+    <h2>로그인</h2>
+    <input class="base_input" type="email" name="username" autofocus>
+    <input class="base_input" type="password" name="password">
+    <button id="sign_in_btn" class="btn" type="submit">로그인</button>
+    <a href="/oauth2/authorization/google">
+        <div class="google_btn">Google Login</div>
+    </a>
+</form>
+
+</body>
+</html>

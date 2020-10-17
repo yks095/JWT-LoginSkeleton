@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-import me.kiseok.jwtskeleton.domain.account.Account;
+import me.kiseok.jwtskeleton.domain.account.AccountAdapter;
 import me.kiseok.jwtskeleton.domain.account.AccountService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,7 +44,7 @@ public class JwtProvider {
     }
 
     public Authentication getAuthentication(String jwt)   {
-        Account account = (Account) accountService.loadUserByUsername(this.getEmailFromJwt(jwt));
+        AccountAdapter account = (AccountAdapter) accountService.loadUserByUsername(this.getEmailFromJwt(jwt));
 
         return new UsernamePasswordAuthenticationToken(accountService, "", account.getAuthorities());
     }
