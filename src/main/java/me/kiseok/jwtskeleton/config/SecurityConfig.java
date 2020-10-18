@@ -46,15 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/api/accounts", "/api/login", "/swagger-ui/**").permitAll()
+                .antMatchers("/login/google/auth", "/sign-in", "/api/accounts", "/api/login", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-            .and()
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userService(accountService)
         ;
     }
 }

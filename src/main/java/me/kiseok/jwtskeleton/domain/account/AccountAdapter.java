@@ -1,41 +1,19 @@
 package me.kiseok.jwtskeleton.domain.account;
 
-import me.kiseok.jwtskeleton.domain.account.dto.OAuthAttributes;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 
-public class AccountAdapter implements UserDetails, OAuth2User {
+@Getter
+@NoArgsConstructor @AllArgsConstructor
+public class AccountAdapter implements UserDetails {
 
     private Account account;
-    private OAuthAttributes attributes;
-
-    public AccountAdapter(Account account) {
-        this.account = account;
-    }
-
-    public AccountAdapter(Account account, OAuthAttributes attributes) {
-        this.account = account;
-        this.attributes = attributes;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    @Override
-    public String getName() {
-        return account.getName();
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes.getAttributes();
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

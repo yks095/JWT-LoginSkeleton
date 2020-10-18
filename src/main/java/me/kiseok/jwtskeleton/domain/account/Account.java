@@ -34,10 +34,4 @@ public class Account {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
-    public Account update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
-
-        return this;
-    }
 }
