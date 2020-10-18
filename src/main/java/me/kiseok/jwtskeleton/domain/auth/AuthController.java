@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.RequiredArgsConstructor;
 import me.kiseok.jwtskeleton.config.jwt.JwtProvider;
 import me.kiseok.jwtskeleton.domain.account.Account;
+import me.kiseok.jwtskeleton.domain.account.AccountAdapter;
 import me.kiseok.jwtskeleton.domain.account.AccountRepository;
 import me.kiseok.jwtskeleton.domain.auth.dto.GoogleRequest;
 import me.kiseok.jwtskeleton.domain.auth.dto.GoogleResponse;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -72,7 +72,6 @@ public class AuthController {
         String responseJson = restTemplate.getForObject(requestURL, String.class);
         Map<String, String> userInfo = mapper.readValue(responseJson, new TypeReference<Map<String, String>>() {});
 
-        createAccount(userInfo);
         jwt = createServerJwt(userInfo);
 
         return new ResponseEntity<>(new LoginResponseDto(jwt), HttpStatus.OK);
@@ -88,7 +87,7 @@ public class AuthController {
                 .build();
     }
 
-    private void createAccount(Map<String, String> userInfo) {
+    private AccountAdapter createAccount(Map<String, String> userInfo) {
         String email = userInfo.get("email");
         String name = userInfo.get("name");
         String picture = userInfo.get("picture");
@@ -101,12 +100,12 @@ public class AuthController {
                 .build();
 
         accountRepository.save(account);
+
+        return new AccountAdapter(account);
     }
 
     private String createServerJwt(Map<String, String> userInfo) {
-        String email = userInfo.get("email");
-        List<String> roles = Collections.singletonList("ROLE_USER");
-
-        return "Bearer " + jwtProvider.generateJwt(email, roles);
+        AccountAdapter accountAdapter = createAccount(userInfo);
+        return "Bearer " + jwtProvider.generateJwt(accountAdapter.getUsername(), accountAdapter.getAccount().getRoles());
     }
 }
