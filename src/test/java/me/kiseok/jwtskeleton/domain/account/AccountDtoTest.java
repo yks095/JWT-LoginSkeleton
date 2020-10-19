@@ -1,7 +1,7 @@
 package me.kiseok.jwtskeleton.domain.account;
 
-import me.kiseok.jwtskeleton.domain.account.dto.AccountRequestDto;
-import me.kiseok.jwtskeleton.domain.account.dto.AccountResponseDto;
+import me.kiseok.jwtskeleton.domain.account.dto.AccountRequest;
+import me.kiseok.jwtskeleton.domain.account.dto.AccountResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,7 +19,7 @@ class AccountDtoTest {
         String name = "testName";
         String picture = "testPicture";
 
-        AccountRequestDto requestDto = AccountRequestDto.builder()
+        AccountRequest requestDto = AccountRequest.builder()
                 .email(email)
                 .password(password)
                 .name(name)
@@ -35,7 +35,7 @@ class AccountDtoTest {
     @DisplayName("AccountRequestDto @Setter 테스트")
     @Test
     void setter_account_requestDto()    {
-        AccountRequestDto requestDto = AccountRequestDto.builder()
+        AccountRequest requestDto = AccountRequest.builder()
                 .email("email")
                 .password("password")
                 .name("name")
@@ -65,7 +65,7 @@ class AccountDtoTest {
         String name = "testName";
         String picture = "testPicture";
 
-        AccountResponseDto responseDto = AccountResponseDto.builder()
+        AccountResponse responseDto = AccountResponse.builder()
                 .email(email)
                 .name(name)
                 .picture(picture)
@@ -79,7 +79,7 @@ class AccountDtoTest {
     @DisplayName("AccountResponseDto @Setter 테스트")
     @Test
     void setter_account_responseDto()    {
-        AccountResponseDto responseDto = AccountResponseDto.builder()
+        AccountResponse responseDto = AccountResponse.builder()
                 .email("email")
                 .name("name")
                 .picture("picture")

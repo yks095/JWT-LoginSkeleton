@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class AccountResponseDto {
+public class AccountResponse {
 
     private Long id;
     private String email;
@@ -14,8 +14,8 @@ public class AccountResponseDto {
     private String picture;
     private List<String> roles;
 
-    public AccountResponseDto toResponse(Account account) {
-        return AccountResponseDto.builder()
+    public AccountResponse toResponse(Account account) {
+        return AccountResponse.builder()
                 .id(account.getId())
                 .email(account.getEmail())
                 .name(account.getName())

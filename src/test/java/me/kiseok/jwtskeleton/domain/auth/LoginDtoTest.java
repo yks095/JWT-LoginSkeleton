@@ -1,11 +1,10 @@
-package me.kiseok.jwtskeleton.domain.login;
+package me.kiseok.jwtskeleton.domain.auth;
 
-import me.kiseok.jwtskeleton.domain.login.dto.LoginRequestDto;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginResponseDto;
+import me.kiseok.jwtskeleton.domain.auth.dto.LoginRequest;
+import me.kiseok.jwtskeleton.domain.auth.dto.LoginResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
@@ -17,7 +16,7 @@ class LoginDtoTest {
         String email = "test@email.com";
         String password = "testPassword";
 
-        LoginRequestDto requestDto = LoginRequestDto.builder()
+        LoginRequest requestDto = LoginRequest.builder()
                 .email(email)
                 .password(password)
                 .build();
@@ -29,7 +28,7 @@ class LoginDtoTest {
     @DisplayName("LoginRequestDto @Setter 테스트")
     @Test
     void setter_login_requestDto_test() {
-        LoginRequestDto requestDto = LoginRequestDto.builder()
+        LoginRequest requestDto = LoginRequest.builder()
                 .email("email")
                 .password("password")
                 .build();
@@ -47,12 +46,12 @@ class LoginDtoTest {
     @DisplayName("LoginResponseDto @Getter @Setter 테스트")
     @Test
     void getter_setter_login_responseDto_test() {
-        String jwt = "testJwt";
-        LoginResponseDto responseDto = new LoginResponseDto();
+        String accessToken = "testAccessToken";
+        LoginResponse responseDto = new LoginResponse();
 
-        responseDto.setJwt(jwt);
+        responseDto.setAccessToken(accessToken);
 
-        assertEquals(responseDto.getJwt(), jwt);
+        assertEquals(responseDto.getAccessToken(), accessToken);
     }
 
 }

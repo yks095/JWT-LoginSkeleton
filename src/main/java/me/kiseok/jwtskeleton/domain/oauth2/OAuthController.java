@@ -1,4 +1,4 @@
-package me.kiseok.jwtskeleton.domain.auth;
+package me.kiseok.jwtskeleton.domain.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,9 +10,9 @@ import me.kiseok.jwtskeleton.config.jwt.JwtProvider;
 import me.kiseok.jwtskeleton.domain.account.Account;
 import me.kiseok.jwtskeleton.domain.account.AccountAdapter;
 import me.kiseok.jwtskeleton.domain.account.AccountRepository;
-import me.kiseok.jwtskeleton.domain.auth.dto.GoogleRequest;
-import me.kiseok.jwtskeleton.domain.auth.dto.GoogleResponse;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginResponseDto;
+import me.kiseok.jwtskeleton.domain.oauth2.dto.GoogleRequest;
+import me.kiseok.jwtskeleton.domain.oauth2.dto.GoogleResponse;
+import me.kiseok.jwtskeleton.domain.auth.dto.LoginResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-public class AuthController {
+public class OAuthController {
 
     private final JwtProvider jwtProvider;
     private final AccountRepository accountRepository;
@@ -74,7 +74,7 @@ public class AuthController {
 
         jwt = createServerJwt(userInfo);
 
-        return new ResponseEntity<>(new LoginResponseDto(jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(jwt), HttpStatus.OK);
     }
 
     private GoogleRequest createGoogleRequest(String authCode) {

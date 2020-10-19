@@ -3,7 +3,7 @@ package me.kiseok.jwtskeleton.config;
 import lombok.RequiredArgsConstructor;
 import me.kiseok.jwtskeleton.config.jwt.JwtAuthenticationFilter;
 import me.kiseok.jwtskeleton.config.jwt.JwtProvider;
-import me.kiseok.jwtskeleton.domain.account.AccountService;
+import me.kiseok.jwtskeleton.domain.token.TokenRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final AccountService accountService;
+    private final TokenRepository tokenRepository;
     private final JwtProvider jwtProvider;
 
     @Bean
@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/google/auth", "/sign-in", "/api/accounts", "/api/login", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
             .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(tokenRepository, jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
         ;
     }

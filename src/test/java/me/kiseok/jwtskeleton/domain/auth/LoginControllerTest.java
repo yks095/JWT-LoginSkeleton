@@ -1,10 +1,10 @@
-package me.kiseok.jwtskeleton.domain.login;
+package me.kiseok.jwtskeleton.domain.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.kiseok.jwtskeleton.domain.account.AccountRepository;
-import me.kiseok.jwtskeleton.domain.account.dto.AccountRequestDto;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginRequestDto;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginResponseDto;
+import me.kiseok.jwtskeleton.domain.account.dto.AccountRequest;
+import me.kiseok.jwtskeleton.domain.auth.dto.LoginRequest;
+import me.kiseok.jwtskeleton.domain.auth.dto.LoginResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class LoginControllerTest {
     @Autowired
     AccountRepository accountRepository;
 
-    static LoginRequestDto requestDto;
+    static LoginRequest requestDto;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -47,21 +47,21 @@ class LoginControllerTest {
         String email = "test@email.com";
         String password = "testPassword";
 
-        AccountRequestDto accountRequestDto = AccountRequestDto.builder()
+        AccountRequest accountRequest = AccountRequest.builder()
                 .email(email)
                 .password(password)
                 .build();
 
         mockMvc.perform(post("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(accountRequestDto)))
+                .content(objectMapper.writeValueAsString(accountRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("email").value(email))
         ;
 
-        requestDto = LoginRequestDto.builder()
+        requestDto = LoginRequest.builder()
                 .email(email)
                 .password(password)
                 .build();
@@ -106,9 +106,9 @@ class LoginControllerTest {
                 ;
 
         String contentAsString = actions.andReturn().getResponse().getContentAsString();
-        LoginResponseDto responseDto = objectMapper.readValue(contentAsString, LoginResponseDto.class);
+        LoginResponse responseDto = objectMapper.readValue(contentAsString, LoginResponse.class);
 
-        assertFalse(responseDto.getJwt().isEmpty());
+        assertFalse(responseDto.getAccessToken().isEmpty());
     }
 
 }

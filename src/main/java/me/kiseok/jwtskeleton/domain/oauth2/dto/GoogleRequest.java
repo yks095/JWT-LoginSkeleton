@@ -1,4 +1,4 @@
-package me.kiseok.jwtskeleton.domain.auth.dto;
+package me.kiseok.jwtskeleton.domain.oauth2.dto;
 
 import lombok.Builder;
 import lombok.Data;

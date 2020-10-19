@@ -1,4 +1,4 @@
-package me.kiseok.jwtskeleton.domain.login.dto;
+package me.kiseok.jwtskeleton.domain.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class LoginResponseDto {
+public class LoginResponse {
 
-    private String jwt;
+    private String accessToken;
 }

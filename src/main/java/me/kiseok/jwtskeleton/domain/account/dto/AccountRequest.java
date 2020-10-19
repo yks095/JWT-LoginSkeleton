@@ -9,7 +9,7 @@ import java.util.Collections;
 
 @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class AccountRequestDto {
+public class AccountRequest {
 
     @Email @NotBlank
     private String email;

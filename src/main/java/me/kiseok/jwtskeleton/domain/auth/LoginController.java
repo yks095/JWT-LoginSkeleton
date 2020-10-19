@@ -1,11 +1,11 @@
-package me.kiseok.jwtskeleton.domain.login;
+package me.kiseok.jwtskeleton.domain.auth;
 
 import lombok.RequiredArgsConstructor;
 import me.kiseok.jwtskeleton.config.jwt.JwtProvider;
 import me.kiseok.jwtskeleton.domain.account.Account;
 import me.kiseok.jwtskeleton.domain.account.AccountRepository;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginRequestDto;
-import me.kiseok.jwtskeleton.domain.login.dto.LoginResponseDto;
+import me.kiseok.jwtskeleton.domain.auth.dto.LoginRequest;
+import me.kiseok.jwtskeleton.domain.auth.dto.LoginResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,14 +23,14 @@ public class LoginController {
     private final AccountRepository accountRepository;
 
     @PostMapping
-    ResponseEntity<?> login(@RequestBody @Valid LoginRequestDto loginRequestDto)  {
-        Account account = accountRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Exist!"));
-        if(!passwordEncoder.matches(loginRequestDto.getPassword(), account.getPassword())) {
+    ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest)  {
+        Account account = accountRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Exist!"));
+        if(!passwordEncoder.matches(loginRequest.getPassword(), account.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password Not Match");
         }
         String jwt = jwtProvider.generateJwt(account.getEmail(), account.getRoles());
 
-        return new ResponseEntity<>(new LoginResponseDto(jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(jwt), HttpStatus.OK);
     }
 
 }
